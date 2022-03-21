@@ -74,6 +74,8 @@ To get started with developing Nimbus itself, see the [developer handbook](https
 
 Nimbus is built in the [Nim language](https://nim-lang.org) - the compiler is automatically installed when building the project for the first time. More information - in particular security-related information about the language - can be found in the [Auditor Handbook](https://nimbus.guide/auditors-book/).
 
+All modules in this repository must be compiled in our controlled build environment. This is achieved either by using the provided Makefile targets, or by prepending each build command with `./env.sh` (e.g. `./env.sh nim c -r tests/test_attestation_pool.nim`). You can also execute `source env.sh` just once in a shell where you intend to execute build commands. Alternatively, the repository also provides configuration for [direnv](https://github.com/direnv/direnv) which automates the process.
+
 ## Tooling and utilities
 
 We provide several tools to interact with ETH2 and the data in the beacon chain:
