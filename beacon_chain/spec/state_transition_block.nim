@@ -88,7 +88,7 @@ proc process_randao(
   let
     epoch = state.get_current_epoch()
 
-  if skipBlsValidation notin flags:
+  if skipBlsValidation notin flags and skipRandaoValidation notin flags:
     let proposer_pubkey = state.validators.item(proposer_index.get).pubkey
 
     if not verify_epoch_signature(

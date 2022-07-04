@@ -2577,6 +2577,16 @@ proc decodeString*(t: typedesc[uint64],
                    value: string): Result[uint64, cstring] =
   Base10.decode(uint64, value)
 
+proc decodeString*(t: typedesc[bool],
+                   value: string): Result[bool, cstring] =
+  case value
+  of "true":
+    ok(true)
+  of "false":
+    ok(false)
+  else:
+    err("Invalid bool")
+
 proc decodeString*(t: typedesc[StateIdent],
                    value: string): Result[StateIdent, cstring] =
   if len(value) > 2:

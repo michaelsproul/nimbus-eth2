@@ -369,7 +369,7 @@ proc installValidatorApiHandlers*(router: var RestRouter, node: BeaconNode) =
   # https://ethereum.github.io/beacon-APIs/#/Validator/produceBlockV2
   router.api(MethodGet, "/eth/v2/validator/blocks/{slot}") do (
     slot: Slot, randao_reveal: Option[ValidatorSig],
-    graffiti: Option[GraffitiBytes]) -> RestApiResponse:
+    graffiti: Option[GraffitiBytes], verify_randao: Option[bool]) -> RestApiResponse:
     let message =
       block:
         let qslot = block:
@@ -387,9 +387,20 @@ proc installValidatorApiHandlers*(router: var RestRouter, node: BeaconNode) =
             return RestApiResponse.jsonError(Http400, InvalidSlotValueError,
                                              "Slot cannot be in the future")
           res
+        let qverify_randao =
+          if verify_randao.isNone:
+            true
+          else:
+            let res = verify_randao.get()
+            if res.isErr():
+              return RestApiResponse.jsonError(Http400, InvalidVerifyRandaoValueError)
+            res.get()
         let qrandao =
-          if randao_reveal.isNone():
-            return RestApiResponse.jsonError(Http400, MissingRandaoRevealValue)
+          if randao_reveal.isNone:
+            if qverify_randao:
+              return RestApiResponse.jsonError(Http400, MissingRandaoRevealValue)
+            else:
+              ValidatorSig.infinity
           else:
             let res = randao_reveal.get()
             if res.isErr():
@@ -418,7 +429,7 @@ proc installValidatorApiHandlers*(router: var RestRouter, node: BeaconNode) =
         if proposer.isNone():
           return RestApiResponse.jsonError(Http400, ProposerNotFoundError)
         let res = await makeBeaconBlockForHeadAndSlot(
-          node, qrandao, proposer.get(), qgraffiti, qhead, qslot)
+          node, qrandao, proposer.get(), qgraffiti, qhead, qslot, qverify_randao)
         if res.isErr():
           return RestApiResponse.jsonError(Http400, res.error())
         res.get()

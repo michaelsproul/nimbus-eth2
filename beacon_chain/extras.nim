@@ -27,6 +27,9 @@ type
     ## Skip verification of BLS signatures in block processing.
     ## Predominantly intended for use in testing, e.g. to allow extra coverage.
     ## Also useful to avoid unnecessary work when replaying known, good blocks.
+    skipRandaoValidation ##\
+    ## Skip verification of the proposer's randao reveal in block processing.
+    ## This is implied by `skipBblsValidation`.
     skipStateRootValidation ##\
     ## Skip verification of block state root.
     strictVerification ##\
