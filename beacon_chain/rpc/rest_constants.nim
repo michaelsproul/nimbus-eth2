@@ -76,8 +76,6 @@ const
     "Missing `slot` value"
   InvalidSlotValueError* =
     "Invalid slot value"
-  InvalidVerifyRandaoValueError* =
-    "Invalid `verify_randao` value"
   MissingCommitteeIndexValueError* =
     "Missing `committee_index` value"
   InvalidCommitteeIndexValueError* =
