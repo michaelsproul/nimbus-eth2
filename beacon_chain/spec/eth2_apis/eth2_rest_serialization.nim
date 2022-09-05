@@ -2725,7 +2725,3 @@ proc decodeString*(t: typedesc[ValidatorFilter],
     })
   else:
     err("Incorrect validator state identifier value")
-
-proc decodeString*(t: typedesc[void],
-                   value: string): Result[void, cstring] =
-  ok()
