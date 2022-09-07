@@ -447,12 +447,14 @@ proc getExecutionPayload[T](
                 payload_id, err = err.msg
           empty_execution_payload
 
-      executionPayloadStatus =
-        awaitWithTimeout(
-          node.consensusManager.eth1Monitor.newExecutionPayload(payload),
-          NEWPAYLOAD_TIMEOUT):
-            info "getExecutionPayload: newPayload timed out"
-            Opt.none PayloadExecutionStatus
+      # FIXME(sproul): temporary hack
+      executionPayloadStatus = Opt.some PayloadExecutionStatus.valid
+      # executionPayloadStatus =
+      #  awaitWithTimeout(
+      #    node.consensusManager.eth1Monitor.newExecutionPayload(payload),
+      #    NEWPAYLOAD_TIMEOUT):
+      #      info "getExecutionPayload: newPayload timed out"
+      #      Opt.none PayloadExecutionStatus
 
     if executionPayloadStatus.isNone or executionPayloadStatus.get in [
         PayloadExecutionStatus.invalid,
