@@ -521,6 +521,11 @@ proc makeBeaconBlockForHeadAndSlot*(
           (static(default(bellatrix.ExecutionPayload)))
         else:
           let
+            merge_complete = is_merge_transition_complete(proposalState[])
+            terminal_block_hash = node.eth1Monitor.terminalBlockHash
+          warn "Attempting to getExecutionPayload. merge complete?", merge_complete
+          warn "Terminal block hash?", terminal_block_hash
+          let
             pubkey = node.dag.validatorKey(validator_index)
             maybeExecutionPayload =
               (await getExecutionPayload[bellatrix.ExecutionPayload](
