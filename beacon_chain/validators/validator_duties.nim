@@ -369,9 +369,9 @@ proc getExecutionPayload[T](
       else:
         default(T)
 
-  if node.eth1Monitor.isNil:
+  if true or node.eth1Monitor.isNil:
     beacon_block_payload_errors.inc()
-    warn "getExecutionPayload: eth1Monitor not initialized; using empty execution payload"
+    warn "getExecutionPayload: using empty execution payload"
     return Opt.some empty_execution_payload
 
   try:
